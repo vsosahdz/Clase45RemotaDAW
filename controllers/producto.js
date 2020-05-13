@@ -9,7 +9,7 @@ exports.getAgregarProducto = (req, res) => {
   });
 };
 
-exports.postAgregarProducto = (req, res) => {
+exports.postAgregarProducto = async (req, res) => {
   const nombre=req.body.nombre;
   const precio=req.body.precio;
   const descripcion=req.body.descripcion;
@@ -19,72 +19,54 @@ exports.postAgregarProducto = (req, res) => {
     descripcion:descripcion,
     _id:new mongoose.Types.ObjectId()
   });
-  producto
-    .save()
-    .then(resultado=>{
-      console.log(producto);
-      console.log('Producto creado');
-      res.redirect('/producto/productos')
-    })
-    .catch(err=>console.log(err));
-  
-  //const producto=new Producto(nombre,precio,descripcion); mongodb  
-  // producto
-  //   .save()
-  //   .then(resultado=>{
-  //     console.log(producto);
-  //     console.log('Producto creado');
-  //     res.redirect('/producto/productos')
-  //   })
-  //   .catch(err=>console.log(err));
+  try{
+    await producto.save();
+    console.log(producto);
+    console.log('Producto creado');
+    res.redirect('/producto/productos')
+  }catch(err){
+    console.log(err);
+  }
 };
 
-exports.getEditarProducto = (req, res) => {
+exports.getEditarProducto = async (req, res) => {
   const editMode= req.query.edit;
   if(!editMode){
     return res.redirect('/');
   }
   const prodId =req.params.productoId;
-  Producto.findById(prodId) // funciona para mongodb y mongoose de forma indistinta
-    .then(producto=>{
-      if(!producto){
-        return res.redirect('/');
-      }
-      res.render('producto/editar-producto.html', {
-      pageTitle: 'Editar Producto',
-      path: '/producto/editar-producto',
-      editing: editMode,
-      producto:producto
-  }); 
-    })
-    .catch(err=>console.log(err));
+  try{
+    const producto=await Producto.findById(prodId); 
+    if(!producto){
+         res.redirect('/');
+    }
+    res.render('producto/editar-producto.html', {
+        pageTitle: 'Editar Producto',
+        path: '/producto/editar-producto',
+        editing: editMode,
+        producto:producto
+    }); 
+  }catch(err){
+    console.log(err);
+  }
 };
 
-exports.postEditarProducto = (req, res) => {
+exports.postEditarProducto = async (req, res) => {
   const prodId=req.body.productoId;
   const nNombre=req.body.nombre;
   const nPrecio=req.body.precio;
   const nDescripcion=req.body.descripcion;
-  
-  Producto.findById(prodId)
-    .then(producto=>{
-      producto.nombre=nNombre,
-      producto.precio=nPrecio,
-      producto.descripcio=nDescripcion
-      return producto.save();
-    })
-    .then(resultado=>{
-     console.log('Producto editado')
-     res.redirect('/producto/productos')
-    })
-    .catch(err=>console.log(err))
-  // const producto=new Producto(nNombre,nPrecio,nDescripcion,prodId);
-  // producto.save()
-  // .then(resultado=>{
-  //   console.log('Producto editado')
-  //   res.redirect('/producto/productos')
-  // })
-  // .catch(err=>console.log(err));
+  try{
+    let producto= await Producto.findById(prodId);
+    producto.nombre=nNombre,
+    producto.precio=nPrecio,
+    producto.descripcion=nDescripcion
+    await producto.save();
+    console.log('Producto editado')
+    res.redirect('/producto/productos')
+  }catch(err){
+    console.log(err);
+  }
   
 };
 
@@ -100,7 +82,6 @@ exports.getProductos = (req, res) => {
       });  
   })
   .catch(err=>console.log(err))
-  
 };
 
 exports.postEliminarProducto = (req, res) => {
@@ -112,10 +93,4 @@ exports.postEliminarProducto = (req, res) => {
      res.redirect('/producto/productos')
    })
   .catch(err=>console.log(err))
-  // Producto.deleteById(prodId)
-  // .then(()=>{
-  //   console.log('Producto eliminado');
-  //   res.redirect('/producto/productos')
-  // })
-  // .catch(err=>console.log(err))
 };
