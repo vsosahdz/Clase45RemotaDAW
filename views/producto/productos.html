@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/product.css">
+    </head>
+
+    <body>
+            <div class="backdrop"></div>
+            <header class="main-header">
+                <button id="side-menu-toggle">Menu</button>
+                <nav class="main-header__nav">
+                    <ul class="main-header__item-list">
+                        <li class="main-header__item">
+                            <a class="<%= path === '/' ? 'active' : '' %>" href="/">Principal</a>
+                        </li>
+                        <li class="main-header__item">
+                            <a class="<%= path === '/producto/agregar-producto' ? 'active' : '' %>" href="/producto/agregar-producto">Agregar Producto
+                            </a>
+                        </li>
+                        <li class="main-header__item">
+                            <a class="<%= path === '/producto/productos' ? 'active' : '' %>" href="/producto/productos">Administrar Productos
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </header>
+            <nav class="mobile-nav">
+                <ul class="mobile-nav__item-list">
+                    
+                    <li class="mobile-nav__item">
+                        <a class="<%= path === '/producto/agregar-producto' ? 'active' : '' %>" href="/producto/agregar-producto">Agregar Producto
+                        </a>
+                    </li>
+                    <li class="mobile-nav__item">
+                        <a class="<%= path === '/producto/productos' ? 'active' : '' %>" href="/producto/productos">Administrar Productos
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <main>
+                <% if (prods.length > 0) { %>
+                    <div class="grid">
+                        <% for (let producto of prods) { %>
+                            <article class="card product-item">
+                                <header class="card__header">
+                                    <h1 class="product__title">
+                                        <%= producto.nombre %>
+                                    </h1>
+                                </header>
+                                
+                                <div class="card__content">
+                                    <h2 class="product__price">$
+                                        <%= producto.precio %>
+                                    </h2>
+                                    <p class="product__description">
+                                        <%= producto.descripcion %>
+                                    </p>
+                                </div>
+                                <div class="card__actions">
+                                    <a href="/producto/editar-producto/<%= producto._id %>?edit=true" class="btn">Editar</a>
+                                    <form action="/producto/eliminar-producto" method="POST">
+                                        <input type="hidden" value="<%= producto._id %>" name="productoId">
+                                        <button class="btn" type="submit">Eliminar</button>
+                                    </form>
+
+                                </div>
+                            </article>
+                            <% } %>
+                    </div>
+                    <% } else { %>
+                        <h1>Sin productos en el inventario</h1>
+                        <% } %>
+            </main>
+            <script src="/js/main.js"></script>
+    </body>
+
+</html>

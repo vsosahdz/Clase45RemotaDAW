@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+    <div class="backdrop"></div>
+    <header class="main-header">
+        <button id="side-menu-toggle">Menu</button>
+        <nav class="main-header__nav">
+            <ul class="main-header__item-list">
+                <li class="main-header__item">
+                    <a class="<%= path === '/' ? 'active' : '' %>" href="/">Principal</a>
+                </li>
+                <li class="main-header__item">
+                    <a class="<%= path === '/producto/agregar-producto' ? 'active' : '' %>" href="/producto/agregar-producto">Agregar Producto
+                    </a>
+                </li>
+                <li class="main-header__item">
+                    <a class="<%= path === '/producto/productos' ? 'active' : '' %>" href="/producto/productos">Administrar Productos
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    
+    <nav class="mobile-nav">
+            <ul class="mobile-nav__item-list">
+                    
+                    <li class="mobile-nav__item">
+                        <a class="<%= path === '/producto/agregar-producto' ? 'active' : '' %>" href="/producto/agregar-producto">Agregar Producto
+                        </a>
+                    </li>
+                    <li class="mobile-nav__item">
+                        <a class="<%= path === '/producto/productos' ? 'active' : '' %>" href="/producto/productos">Administrar Productos
+                        </a>
+                    </li>
+                </ul>
+    </nav>
+    <h1>Página no encontrada</h1>
+
