@@ -70,27 +70,28 @@ exports.postEditarProducto = async (req, res) => {
   
 };
 
-exports.getProductos = (req, res) => {
+exports.getProductos = async(req, res) => {
   //Producto.fetchAll()
-  Producto.find()
-  .then(productos=>{
+  try{
+    const productos=await Producto.find();
     console.log(productos);//opc
     res.render('producto/productos.html', {
-        prods: productos,
-        pageTitle: 'Adminstrar Productos',
-        path: '/producto/productos'
-      });  
-  })
-  .catch(err=>console.log(err))
+          prods: productos,
+          pageTitle: 'Adminstrar Productos',
+          path: '/producto/productos'
+        });  
+  }catch(err){
+    console.log(err);
+  }
 };
 
-exports.postEliminarProducto = (req, res) => {
+exports.postEliminarProducto = async (req, res) => {
   const prodId=req.body.productoId;
-  
-  Producto.findByIdAndRemove(prodId)
-  .then(()=>{
-     console.log('Producto eliminado');
-     res.redirect('/producto/productos')
-   })
-  .catch(err=>console.log(err))
+  try{
+    await Producto.findByIdAndRemove(prodId);
+    console.log('Producto eliminado');
+    res.redirect('/producto/productos')
+  }catch(err){
+    console.log(err);
+  }
 };
